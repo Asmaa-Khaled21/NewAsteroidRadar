@@ -1,6 +1,7 @@
 package com.udacity.asteroidradar.Repositry
 
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.udacity.asteroidradar.*
@@ -53,14 +54,20 @@ class Repo(val database: AsteroidData) {
             try {
                 val asteroidJson = AsteroidApi.jsonAPI.getAsteroid()
                 val imageResponse = AsteroidApi.jsonAPI.getImage()
-
                 val jsonObject = JSONObject(asteroidJson)
+                Log.d("jsonObject",jsonObject.toString())
+                Log.d("jsonObject",asteroidJson.toString())
+                Log.d("jsonObject",imageResponse.toString())
+
                 val asteroidsArrayList = parseAsteroidsJsonResult(jsonObject)
+                Log.d("jsonObjectasteroidsArrayList",asteroidsArrayList.toString())
 
                 database.asteroidDAO.insertAllAsteroid(*asteroidsArrayList.asAsteroidDatabase())
                 database.imageDao.insertImage(imageResponse.asImageDatabase())
             } catch (e: Exception) {
                 Timber.e(e)
+
+                Log.d("jsonObject",e.toString())
             }
         }
     }

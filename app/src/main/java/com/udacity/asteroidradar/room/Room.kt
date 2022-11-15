@@ -6,7 +6,7 @@ import androidx.room.*
 import com.udacity.asteroidradar.Asteroid
 import com.udacity.asteroidradar.PictureOfDay
 
-   // Room Entity Asteroid
+// Room Entity Asteroid
 @Entity
 data class AsteroidEntity(
     @PrimaryKey
@@ -34,68 +34,66 @@ fun List<AsteroidEntity>.asAsteroidEntity():List<Asteroid>
     }
 }
 
-  // DOA Asteroid
+// DOA Asteroid
 @Dao
 interface AsteroidDAO {
     @Query("SELECT * FROM asteroidentity obj WHERE obj.closeApproachDate = :today")
-    suspend fun getTodayAsteroid(today :String):LiveData<List<AsteroidEntity>>
+    fun getTodayAsteroid(today :String):LiveData<List<AsteroidEntity>>
 
     @Query("SELECT * FROM asteroidentity obj WHERE obj.closeApproachDate BETWEEN :startDate  AND :endDate  order by closeApproachDate desc")
-    suspend fun getWeekAsteroid(startDate:String, endDate:String):LiveData<List<AsteroidEntity>>
+    fun getWeekAsteroid(startDate:String, endDate:String):LiveData<List<AsteroidEntity>>
 
     @Query("select * from asteroidentity order by closeApproachDate desc")
-    suspend fun getAsteroid():LiveData<List<AsteroidEntity>>
+    fun getAsteroid():LiveData<List<AsteroidEntity>>
 
     @Insert(onConflict= OnConflictStrategy.REPLACE)
-    suspend fun insertAllAsteroid(vararg database: AsteroidEntity)
+    fun insertAllAsteroid(vararg database: AsteroidEntity)
 
     @Query("DELETE FROM asteroidentity WHERE closeApproachDate<:today")
-      fun delete(today:String)
+    fun delete(today:String)
 }
 
-    //////////////////////////////  IMAGE  //////////////////////////////
+//////////////////////////////  IMAGE  //////////////////////////////
 
 // Room Entity Image
 @Entity
-data class ImageEntity ( @PrimaryKey
-    val url : String,
-    val date: String,
-    val media_Type : String,
-    val title : String)
+data class ImageEntity (@PrimaryKey
+                        val media_type: String,
+                        val title: String,
+                        val url: String)
 
 fun ImageEntity.asImageEntity(): PictureOfDay {
-    return PictureOfDay(url, media_Type, title)
+    return PictureOfDay(url=url, media_type=media_type, title=title)
 }
 
 // DOA Image
 @Dao
 interface ImageDAO{
     @Query("select * from ImageEntity")
-    suspend fun getImage():LiveData<ImageEntity>
+    fun getImage():LiveData<ImageEntity>
 
     @Insert(onConflict= OnConflictStrategy.REPLACE)
-    suspend fun insertImage(ImageEntity: ImageEntity)
+    fun insertImage(ImageEntity: ImageEntity)
 }
 
- //////////////////////////////  Database entities  //////////////////////////////
+//////////////////////////////  Database entities  //////////////////////////////
 
 @Database (entities = [AsteroidEntity::class, ImageEntity::class], version = 1, exportSchema = false)
-
- abstract class AsteroidData : RoomDatabase() {
+abstract class AsteroidData : RoomDatabase() {
     abstract val asteroidDAO:AsteroidDAO
     abstract val imageDao:ImageDAO
     companion object{
-    private lateinit var INSTANCE: AsteroidData
-    fun getDatabase(context: Context): AsteroidData {
-        synchronized(AsteroidData::class.java) {
-            if (!::INSTANCE.isInitialized) {
-                INSTANCE = Room.databaseBuilder(context.applicationContext,
-                    AsteroidData::class.java, "asteroids")
-                    .build()
+        private lateinit var INSTANCE: AsteroidData
+        fun getDatabase(context: Context): AsteroidData {
+            synchronized(AsteroidData::class.java) {
+                if (!::INSTANCE.isInitialized) {
+                    INSTANCE = Room.databaseBuilder(context.applicationContext,
+                        AsteroidData::class.java, "asteroids")
+                        .build()
+                }
             }
+            return INSTANCE
         }
-        return INSTANCE
-      }
     }
 
 }

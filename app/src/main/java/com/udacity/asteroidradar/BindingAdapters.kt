@@ -59,6 +59,7 @@ fun goneIfNotNull(view: View, it: Any?) {
 @BindingAdapter("setImageUrl")
 fun setImageUrl(imageView: ImageView, pic: PictureOfDay?) {
     if (pic != null)
+//        Log.d("pic.url","${pic.url}")
         Picasso.get().load(pic.url).into(imageView)
 }
 

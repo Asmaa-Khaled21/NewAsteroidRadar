@@ -65,7 +65,7 @@ class MainFragment : Fragment() {
         super.onCreateOptionsMenu(menu, inflater)
     }
 }
-//////////////////////////////////////////////////////////////////////////////
+
 
 class Adapter ( val onClickListener: OnClickListener) :
     ListAdapter< Asteroid, Adapter.ViewHolder>(DiffCallback) {

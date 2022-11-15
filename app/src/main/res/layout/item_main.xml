@@ -3,14 +3,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-<!--    Two Way Binding-->
+    <!--    Two Way Binding-->
     <data>
         <variable
             name="asteroids"
             type="com.udacity.asteroidradar.Asteroid" />
     </data>
-
-    <com.google.android.material.card.MaterialCardView
+    <!--    com.google.android.material.card.MaterialCardView-->
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardBackgroundColor="@color/app_background">
@@ -46,15 +46,14 @@
                     android:background="@color/app_background"
                     android:text="@{asteroids.closeApproachDate}" />
             </LinearLayout>
-<!--android:contentDescription="@{@string/hazardous_description(asteroids.isPotentiallyHazardous)}"-->
+
             <ImageView
                 android:id="@+id/Image_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@color/app_background"
-
                 app:statusIcon="@{asteroids.isPotentiallyHazardous}"
                 android:padding="10dp"/>
         </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
+    </androidx.cardview.widget.CardView>
 </layout>
