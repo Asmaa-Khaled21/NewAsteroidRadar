@@ -16,9 +16,11 @@ class Refresh (appContext: Context, params: WorkerParameters
             val database = AsteroidData.getDatabase(applicationContext)
             val repository = Repo(database)
             return try {
+
                 repository.refresh()
                 repository.delete()
                 Result.success()
+
             } catch (e: HttpException) {
                 Result.retry()
             }
