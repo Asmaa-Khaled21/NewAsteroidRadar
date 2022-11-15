@@ -19,8 +19,7 @@ import java.util.*
 
 class Repo(val database: AsteroidData) {
 
-    val timeToday =
-        Utils.formattedString(Calendar.getInstance().time, Constants.API_QUERY_DATE_FORMAT)
+    val timeToday = Utils.formattedString(Calendar.getInstance().time, Constants.API_QUERY_DATE_FORMAT)
 
     val timeWeek = Utils.formattedString(
         Utils.addDaysToDate(Calendar.getInstance().time, 7),
@@ -63,6 +62,13 @@ class Repo(val database: AsteroidData) {
             } catch (e: Exception) {
                 Timber.e(e)
             }
+        }
+    }
+
+    /////////////////// delete /////////////////////
+    suspend fun delete() {
+        withContext(Dispatchers.IO){
+            database.asteroidDAO.delete(timeToday)
         }
     }
 }

@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.udacity.asteroidradar.Asteroid
+import com.udacity.asteroidradar.Converters
 import com.udacity.asteroidradar.PictureOfDay
 
    // Room Entity Asteroid
@@ -36,7 +37,7 @@ fun List<AsteroidEntity>.asAsteroidEntity():List<Asteroid>
 
   // DOA Asteroid
 @Dao
-interface DAOAsteroid {
+interface AsteroidDAO {
     @Query("SELECT * FROM asteroidentity obj WHERE obj.closeApproachDate = :today")
     suspend fun getTodayAsteroid(today :String):LiveData<List<AsteroidEntity>>
 
@@ -48,6 +49,9 @@ interface DAOAsteroid {
 
     @Insert(onConflict= OnConflictStrategy.REPLACE)
     suspend fun insertAllAsteroid(vararg database: AsteroidEntity)
+
+    @Query("DELETE FROM asteroidentity WHERE closeApproachDate<:today")
+      fun delete(today:String)
 }
 
     //////////////////////////////  IMAGE  //////////////////////////////
@@ -66,7 +70,7 @@ fun ImageEntity.asImageEntity(): PictureOfDay {
 
 // DOA Image
 @Dao
-interface DaoImage{
+interface ImageDAO{
     @Query("select * from ImageEntity")
     suspend fun getImage():LiveData<ImageEntity>
 
@@ -77,8 +81,10 @@ interface DaoImage{
  //////////////////////////////  Database entities  //////////////////////////////
 
 @Database (entities = [AsteroidEntity::class, ImageEntity::class], version = 1, exportSchema = false)
+@TypeConverters(Converters::class)
  abstract class AsteroidData : RoomDatabase() {
-
+    abstract val asteroidDAO:AsteroidDAO
+    abstract val imageDao:ImageDAO
     companion object{
     private lateinit var INSTANCE: AsteroidData
     fun getDatabase(context: Context): AsteroidData {
@@ -92,8 +98,7 @@ interface DaoImage{
         return INSTANCE
       }
     }
-    abstract val asteroidDAO:DAOAsteroid
-    abstract val imageDao:DaoImage
+
 }
 
 

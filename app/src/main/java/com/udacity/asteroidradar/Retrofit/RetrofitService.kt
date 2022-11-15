@@ -9,6 +9,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.GET
 
 
@@ -17,25 +18,25 @@ private val moshi = Moshi.Builder()
     .add(KotlinJsonAdapterFactory())
     .build()
 
-fun client(): OkHttpClient {
-    val logging = HttpLoggingInterceptor()
-// set your desired log level
-// set your desired log level
-    logging.level = HttpLoggingInterceptor.Level.BODY
-    val httpClient = OkHttpClient.Builder()
-// add your other interceptors …
-// add logging as last interceptor
-// add your other interceptors …
-// add logging as last interceptor
-    httpClient.addInterceptor(logging)
-    return httpClient.build()
-}
+//fun client(): OkHttpClient {
+//    val logging = HttpLoggingInterceptor()
+//// set your desired log level
+//// set your desired log level
+//    logging.level = HttpLoggingInterceptor.Level.BODY
+//    val httpClient = OkHttpClient.Builder()
+//// add your other interceptors …
+//// add logging as last interceptor
+//// add your other interceptors …
+//// add logging as last interceptor
+//    httpClient.addInterceptor(logging)
+//    return httpClient.build()
+//}
 
 private val retrofit = Retrofit.Builder()
     // ConverterFactory to the MoshiConverterFactory with our Moshi Object
+    .addConverterFactory(ScalarsConverterFactory.create())//STRING
     .addConverterFactory(MoshiConverterFactory.create(moshi))
     .baseUrl(BASE_URL)
-    .client(client())
     .build()
 
 interface Json {

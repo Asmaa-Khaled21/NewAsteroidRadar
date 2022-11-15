@@ -17,6 +17,7 @@ class Refresh (appContext: Context, params: WorkerParameters
             val repository = Repo(database)
             return try {
                 repository.refresh()
+                repository.delete()
                 Result.success()
             } catch (e: HttpException) {
                 Result.retry()
