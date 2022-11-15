@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.udacity.asteroidradar.Asteroid
-import com.udacity.asteroidradar.Converters
 import com.udacity.asteroidradar.PictureOfDay
 
    // Room Entity Asteroid
@@ -81,7 +80,7 @@ interface ImageDAO{
  //////////////////////////////  Database entities  //////////////////////////////
 
 @Database (entities = [AsteroidEntity::class, ImageEntity::class], version = 1, exportSchema = false)
-@TypeConverters(Converters::class)
+
  abstract class AsteroidData : RoomDatabase() {
     abstract val asteroidDAO:AsteroidDAO
     abstract val imageDao:ImageDAO
